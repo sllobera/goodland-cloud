@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Goodland Cloud — Technical Overview, Implementation &amp; Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0f1419;
+      --muted: #4a5568;
+      --line: #cbd5e0;
+      --panel: #f4f1ea;
+      --accent: #1b5e3a;
+      --accent2: #c45c26;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Literata", Georgia, serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 0;
+    }
+    h1, h2, h3 { font-family: "Unbounded", system-ui, sans-serif; font-weight: 700; }
+    h1 { font-size: 22pt; margin: 0 0 0.35em; letter-spacing: -0.02em; }
+    h2 { font-size: 13pt; margin: 1.4em 0 0.5em; color: var(--accent); border-bottom: 2px solid var(--line); padding-bottom: 0.2em; }
+    h3 { font-size: 11pt; margin: 1em 0 0.35em; }
+    p, li { color: var(--muted); }
+    .meta { font-size: 9pt; color: var(--muted); margin-bottom: 2em; }
+    .cover { min-height: 240mm; display: flex; flex-direction: column; justify-content: center; page-break-after: always; }
+    .tag { display: inline-block; background: var(--panel); border: 1px solid var(--line); padding: 0.2em 0.55em; font-size: 8.5pt; font-family: "Unbounded", sans-serif; }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 0.75em 0 1.25em; }
+    th, td { border: 1px solid var(--line); padding: 0.45em 0.5em; text-align: left; vertical-align: top; }
+    th { background: var(--panel); font-family: "Unbounded", sans-serif; font-weight: 600; font-size: 8.5pt; color: var(--ink); }
+    .small { font-size: 8.5pt; }
+    .diagram {
+      background: #faf9f6;
+      border: 1px solid var(--line);
+      padding: 0.75em;
+      margin: 0.75em 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5em; align-items: stretch; justify-content: center; }
+    .box {
+      border: 1px solid var(--accent);
+      background: #fff;
+      padding: 0.45em 0.55em;
+      border-radius: 4px;
+      text-align: center;
+      min-width: 5em;
+      flex: 1 1 auto;
+      max-width: 130px;
+    }
+    .box.sec { border-color: var(--accent2); }
+    .box.mutedb { border-color: var(--line); color: var(--muted); }
+    .arrow { align-self: center; color: var(--muted); }
+    .zone { border: 2px dashed var(--accent); padding: 0.6em; margin: 0.5em 0; border-radius: 6px; }
+    .zone-title { font-family: "Unbounded", sans-serif; font-size: 8pt; color: var(--accent); margin-bottom: 0.4em; }
+    ul { margin: 0.35em 0 0.75em 1.1em; padding: 0; }
+    ol.small { margin: 0.35em 0 0.75em 1.2em; padding: 0; }
+    .footnote { font-size: 8pt; color: var(--muted); margin-top: 2em; border-top: 1px solid var(--line); padding-top: 0.75em; }
+    @media print {
+      h2 { page-break-after: avoid; }
+      .diagram { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="cover">
+    <span class="tag">Operations &amp; delivery</span>
+    <h1>Goodland Cloud</h1>
+    <p class="meta"><strong>Technical overview — implementation, setup &amp; support structure</strong><br />
+    Vietnam · Data, AI &amp; GPU services · Customer-facing delivery model</p>
+    <p class="small">Companion to <em>Goodland-Cloud-Architecture-Pricing</em> (what we build) — this document describes <strong>how</strong> we stand it up, run it, and support customers. Intended for internal teams, partners, and enterprise RFPs. Adjust names and SLAs to match executed contracts.</p>
+  </section>
+
+  <h2>1. Scope &amp; principles</h2>
+  <ul class="small">
+    <li><strong>In scope:</strong> Onboarding methodology, environment strategy, handover to operations, support tiers, escalation, incident &amp; change interfaces with customers.</li>
+    <li><strong>Out of scope (here):</strong> Detailed network diagrams, vendor-specific runbooks, and legal SLA text — those live in appendices per deployment.</li>
+    <li><strong>Principles:</strong> Single tenant isolation where contracted; infrastructure-as-code for repeatability; measurable SLAs; Vietnamese + English support paths; security and compliance checkpoints at each phase gate.</li>
+  </ul>
+
+  <h2>2. End-to-end implementation methodology</h2>
+  <p class="small">Typical greenfield customer journey from contract signature to steady-state support. Durations are indicative (weeks) for a mid-size SME; enterprise or regulated workloads add discovery and testing time.</p>
+
+  <h3>Phase 0 — Kickoff &amp; discovery (week 1–2)</h3>
+  <ul class="small">
+    <li>Assign <strong>Delivery Lead</strong> (technical) and <strong>Customer Success / CSM</strong> (commercial alignment).</li>
+    <li>Workshops: data volumes, RPO/RTO, ERP/AI use cases, identity provider (IdP), IP allowlists, data residency confirmation.</li>
+    <li>Outputs: solution checklist, migration window calendar, RACI, success criteria for go-live.</li>
+  </ul>
+
+  <h3>Phase 1 — Tenant &amp; landing zone (week 2–4)</h3>
+  <ul class="small">
+    <li>Provision <strong>project / subscription / VPC</strong> (per platform choice) within Vietnam region; baseline networking, subnets, private endpoints.</li>
+    <li><strong>IAM:</strong> Customer admin roles, break-glass policy, MFA enforcement, API keys / workload identities.</li>
+    <li><strong>IaC:</strong> Terraform / Bicep / vendor-equivalent templates versioned in Git; peer review before apply to production.</li>
+    <li>Outputs: tenant inventory sheet, network diagram (internal), access list for customer admins.</li>
+  </ul>
+
+  <h3>Phase 2 — Core data services (week 3–6)</h3>
+  <ul class="small">
+    <li>Enable object/file storage, backup policies, encryption (KMS/CMEK per contract), logging to immutable store.</li>
+    <li>Configure <strong>IDS / monitoring</strong> feeds, alert routing to Goodland NOC mailbox/phone bridge, customer notification preferences.</li>
+    <li>Outputs: backup verification job, first restore drill (sandbox), monitoring dashboard access for customer (read-only optional).</li>
+  </ul>
+
+  <h3>Phase 3 — Migration &amp; cutover (week 4–8, parallel possible)</h3>
+  <ul class="small">
+    <li><strong>Migration:</strong> Bulk transfer (appliance or high-bandwidth link), incremental sync, checksum validation.</li>
+    <li><strong>Cutover:</strong> Maintenance window, DNS/API endpoint switch, smoke tests, rollback criteria documented.</li>
+    <li><strong>Hypercare:</strong> 2–4 weeks elevated L2/L3 attention post go-live (included in Business+ or purchased).</li>
+  </ul>
+
+  <h3>Phase 4 — AI &amp; GPU (optional, week 4–10+)</h3>
+  <ul class="small">
+    <li>RAG: document ingestion, embedding pipeline, vector DB sizing, ERP API read-only connectors, red-team prompts checklist.</li>
+    <li>OCR / speech: queue sizing, PII handling, human review queues.</li>
+    <li><strong>GPU rental:</strong> quota approval, image catalog (CUDA drivers), autoshutdown for dev clusters, billing alerts.</li>
+  </ul>
+
+  <h3>Phase 5 — Steady state &amp; handover</h3>
+  <ul class="small">
+    <li>Formal <strong>service handover</strong> to Operations: runbooks, on-call rotation, known issues log, support portal credentials.</li>
+    <li>Quarterly review template (capacity, cost, incidents, roadmap) — see §7.</li>
+  </ul>
+
+  <h2>3. Environment &amp; release strategy</h2>
+  <table>
+    <thead>
+      <tr><th>Environment</th><th>Purpose</th><th>Typical policy</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Development</strong></td><td>Customer integration testing, non-production data or masked sets</td><td>No production SLAs; may use smaller GPU SKUs</td></tr>
+      <tr><td><strong>Staging</strong></td><td>Change validation, DR rehearsal, UAT</td><td>Parity with prod where feasible; weekly refresh from anonymized snapshots if agreed</td></tr>
+      <tr><td><strong>Production</strong></td><td>Live workloads</td><td>Full monitoring, change windows, SLA clock</td></tr>
+    </tbody>
+  </table>
+  <p class="small"><strong>Releases:</strong> Goodland platform changes flow through CI (lint, tests, security scan) → staging → approved change record → production during published maintenance windows unless emergency security patch.</p>
+
+  <h2>4. Support organization structure</h2>
+  <p class="small">Functional model; headcount scales with customer base. Roles may be combined in early stage (e.g. L2+L3 same engineer on-call).</p>
+  <div class="diagram">
+    <div class="zone">
+      <div class="zone-title">Customer-facing</div>
+      <div class="row">
+        <div class="box mutedb">Customer<br /><span class="small">admins / users</span></div>
+        <span class="arrow">→</span>
+        <div class="box">Portal / email<br /><span class="small">+ hotline</span></div>
+      </div>
+    </div>
+    <div class="zone">
+      <div class="zone-title">Goodland Cloud support tiers</div>
+      <div class="row">
+        <div class="box sec">L1<br /><span class="small">triage, known issues</span></div>
+        <div class="box sec">L2<br /><span class="small">platform &amp; config</span></div>
+        <div class="box sec">L3<br /><span class="small">engineering / vendor</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box">NOC<br /><span class="small">24/7 monitor</span></div>
+        <div class="box">CSM<br /><span class="small">Business+ / Ent.</span></div>
+        <div class="box mutedb">IR lead<br /><span class="small">security events</span></div>
+      </div>
+    </div>
+    <p class="small" style="margin:0.5em 0 0;text-align:center;"><strong>L1</strong> — intake, categorization, password resets (where applicable), status comms.<br />
+    <strong>L2</strong> — storage/backup/AI service configuration, log analysis, vendor ticket filing.<br />
+    <strong>L3</strong> — deep defects, performance tuning, architecture changes, escalation to cloud/Dc partner.</p>
+  </div>
+
+  <h3>4.1 Channels &amp; languages</h3>
+  <table>
+    <thead>
+      <tr><th>Channel</th><th>Use</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Support portal / ticketing</td><td>Primary; audit trail</td><td>Ticket ID, SLA timers, attachments</td></tr>
+      <tr><td>Email</td><td>Alternative intake</td><td>Auto-create ticket where integrated</td></tr>
+      <tr><td>Phone / hotline</td><td>Sev1 / outage</td><td>Business+ and Enterprise; maps to on-call</td></tr>
+      <tr><td>Chat</td><td>Growth+ during extended hours</td><td>Optional integration (e.g. Teams) for Enterprise</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Support provided in <strong>Vietnamese</strong> and <strong>English</strong> per customer preference; technical runbooks maintained in both languages for L1 scripts.</p>
+
+  <h3>4.2 Coverage by commercial tier (indicative)</h3>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>Support window</th><th>Default channel</th><th>CSM / IR</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Starter</td><td>Business hours (e.g. 08:00–18:00 ICT, Mon–Fri)</td><td>Portal / email</td><td>—</td></tr>
+      <tr><td>Growth</td><td>Extended (e.g. 07:00–22:00 ICT) + chat option</td><td>Portal + chat</td><td>—</td></tr>
+      <tr><td>Business</td><td>24/7 for <strong>Sev1</strong> platform down; business hours for Sev2–4</td><td>All channels per contract</td><td>CSM optional</td></tr>
+      <tr><td>Enterprise</td><td>24/7 multi-channel</td><td>Phone + portal + named CSM</td><td>Dedicated CSM; IR tabletop exercises optional</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Severity model &amp; response targets</h2>
+  <p class="small">Targets are <strong>initial response</strong> (acknowledgement + triage start), not necessarily resolution. Final numbers belong in customer SLA/DPA.</p>
+  <table>
+    <thead>
+      <tr><th>Sev</th><th>Definition (examples)</th><th>Initial response (Business)</th><th>Initial response (Enterprise)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td>Production storage/API unavailable for all users; data loss in progress</td><td>≤ 30 min (24/7)</td><td>≤ 15 min (24/7)</td></tr>
+      <tr><td><strong>2</strong></td><td>Major degradation; backup failing; single AZ impact with workaround</td><td>≤ 4 business hours</td><td>≤ 2 hours (24/7)</td></tr>
+      <tr><td><strong>3</strong></td><td>Partial issue; workaround exists; dev/test only</td><td>≤ 1 business day</td><td>≤ 8 hours</td></tr>
+      <tr><td><strong>4</strong></td><td>How-to, feature request, general question</td><td>≤ 2 business days</td><td>≤ 1 business day</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.1 Escalation path</h3>
+  <ol class="small">
+    <li>L1 cannot resolve within SLA → assign L2 with full timeline and customer comms.</li>
+    <li>L2 engages L3 / vendor / DC partner; Delivery Lead notified for Sev1–2.</li>
+    <li>Customer escalation: CSM (if any) + Support Manager + optional executive bridge for Enterprise.</li>
+    <li>Post-incident: Sev1–2 require <strong>RCA</strong> within agreed days (e.g. 5–10 business days) and corrective actions tracked.</li>
+  </ol>
+
+  <h2>6. Incident, change &amp; maintenance</h2>
+  <h3>6.1 Incident management</h3>
+  <ul class="small">
+    <li>NOC monitors platform health; correlates IDS signals; opens internal incident when thresholds breach.</li>
+    <li>Customer-visible incidents: status page update (Enterprise) or email blast per communication plan.</li>
+    <li>Security incidents: IR playbook, customer notification per legal/regulatory timeline.</li>
+  </ul>
+  <h3>6.2 Change management</h3>
+  <ul class="small">
+    <li><strong>Standard changes:</strong> pre-approved (e.g. certificate renewal) with automation.</li>
+    <li><strong>Normal changes:</strong> CAB review for production-impacting work; customer notice N business days before (per tier).</li>
+    <li><strong>Emergency changes:</strong> security patch; retrospective CAB within 48h.</li>
+  </ul>
+
+  <h2>7. Customer success &amp; continuous improvement</h2>
+  <ul class="small">
+    <li><strong>Onboarding checklist</strong> signed off by Delivery Lead and customer technical owner.</li>
+    <li><strong>Monthly</strong> (Growth+): usage &amp; ticket trend summary.</li>
+    <li><strong>Quarterly business review (QBR)</strong> (Business+): capacity forecast, cost optimization, roadmap (AI/GPU features), training gaps.</li>
+    <li><strong>Training:</strong> Admin webinar, backup restore lab, AI acceptable-use &amp; data-handling briefing for power users.</li>
+    <li><strong>Feedback loop:</strong> Product backlog fed from support tags and CSM notes.</li>
+  </ul>
+
+  <h2>8. RACI snapshot (delivery vs customer)</h2>
+  <table>
+    <thead>
+      <tr><th>Activity</th><th>Goodland</th><th>Customer</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Tenant &amp; network baseline</td><td>R (execute)</td><td>A (approve design), C (requirements)</td></tr>
+      <tr><td>Application / ERP configuration inside customer systems</td><td>C</td><td>R/A</td></tr>
+      <tr><td>Data migration tooling &amp; cutover window</td><td>R</td><td>A (data owner sign-off)</td></tr>
+      <tr><td>Day-2 backup verification &amp; restore tests</td><td>R (facilitate)</td><td>A (validate data)</td></tr>
+      <tr><td>Platform patching &amp; infra CVEs</td><td>R/A</td><td>I</td></tr>
+      <tr><td>Customer IAM (users, MFA)</td><td>C</td><td>R/A</td></tr>
+    </tbody>
+  </table>
+  <p class="small">R = responsible, A = accountable, C = consulted, I = informed.</p>
+
+  <p class="footnote">
+    <strong>Related:</strong> <em>Goodland-Cloud-Architecture-Pricing.html</em> — technical architecture &amp; pricing.<br />
+    Goodland Cloud — Technical overview &amp; support structure. Internal / planning document; not a binding SLA until executed in contract.
+  </p>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Goodland Cloud — Technical Architecture &amp; Pricing (Vietnam)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0f1419;
+      --muted: #4a5568;
+      --line: #cbd5e0;
+      --panel: #f4f1ea;
+      --accent: #1b5e3a;
+      --accent2: #c45c26;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Literata", Georgia, serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 0;
+    }
+    h1, h2, h3 { font-family: "Unbounded", system-ui, sans-serif; font-weight: 700; }
+    h1 { font-size: 22pt; margin: 0 0 0.35em; letter-spacing: -0.02em; }
+    h2 { font-size: 13pt; margin: 1.4em 0 0.5em; color: var(--accent); border-bottom: 2px solid var(--line); padding-bottom: 0.2em; }
+    h3 { font-size: 11pt; margin: 1em 0 0.35em; }
+    p, li { color: var(--muted); }
+    .meta { font-size: 9pt; color: var(--muted); margin-bottom: 2em; }
+    .cover { min-height: 240mm; display: flex; flex-direction: column; justify-content: center; page-break-after: always; }
+    .tag { display: inline-block; background: var(--panel); border: 1px solid var(--line); padding: 0.2em 0.55em; font-size: 8.5pt; font-family: "Unbounded", sans-serif; }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 0.75em 0 1.25em; }
+    th, td { border: 1px solid var(--line); padding: 0.45em 0.5em; text-align: left; vertical-align: top; }
+    th { background: var(--panel); font-family: "Unbounded", sans-serif; font-weight: 600; font-size: 8.5pt; color: var(--ink); }
+    .small { font-size: 8.5pt; }
+    .diagram {
+      background: #faf9f6;
+      border: 1px solid var(--line);
+      padding: 0.75em;
+      margin: 0.75em 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5em; align-items: stretch; justify-content: center; }
+    .box {
+      border: 1px solid var(--accent);
+      background: #fff;
+      padding: 0.45em 0.55em;
+      border-radius: 4px;
+      text-align: center;
+      min-width: 5.5em;
+      flex: 1 1 auto;
+      max-width: 140px;
+    }
+    .box.sec { border-color: var(--accent2); }
+    .box.mutedb { border-color: var(--line); color: var(--muted); }
+    .arrow { align-self: center; color: var(--muted); font-size: 14pt; }
+    .zone { border: 2px dashed var(--accent); padding: 0.6em; margin: 0.5em 0; border-radius: 6px; }
+    .zone-title { font-family: "Unbounded", sans-serif; font-size: 8pt; color: var(--accent); margin-bottom: 0.4em; }
+    ul { margin: 0.35em 0 0.75em 1.1em; padding: 0; }
+    .footnote { font-size: 8pt; color: var(--muted); margin-top: 2em; border-top: 1px solid var(--line); padding-top: 0.75em; }
+    @media print {
+      h2 { page-break-after: avoid; }
+      .diagram { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="cover">
+    <span class="tag">Internal / appendix-ready</span>
+    <h1>Goodland Cloud Data Service</h1>
+    <p class="meta"><strong>Technical architecture overview &amp; indicative pricing</strong><br />
+    Vietnam market entry · Data residency · Storage, backup, IDS, compliance · ERP AI · GPU rental</p>
+    <p class="small">This document supports the business plan appendix. Diagrams describe a target-state reference architecture. Pricing is illustrative until vendor and tax positions are finalized.</p>
+  </section>
+
+  <h2>1. Executive alignment</h2>
+  <ul>
+    <li><strong>Objective:</strong> Secure, scalable cloud data services for Vietnamese businesses.</li>
+    <li><strong>Offerings:</strong> Cloud storage, managed backup &amp; recovery, security monitoring (IDS), APIs, 24/7 support (Vietnamese &amp; English), <strong>ERP-oriented AI services</strong> (assistant, OCR, analytics, automation, voice, knowledge), and <strong>on-demand GPU rental</strong> for training and inference.</li>
+    <li><strong>Differentiation:</strong> Local compliance posture, in-country data residency, transparent tiers, integrated security operations, optional colocation of AI pipelines and ERP integrations within the same trust boundary.</li>
+  </ul>
+
+  <h2>2. High-level architecture (Vietnam boundary)</h2>
+  <div class="diagram">
+    <div class="zone">
+      <div class="zone-title">Clients</div>
+      <div class="row">
+        <div class="box mutedb">SMEs</div>
+        <div class="box mutedb">Enterprises</div>
+        <div class="box mutedb">Tech startups</div>
+      </div>
+    </div>
+    <p style="text-align:center;margin:0.35em 0;color:var(--muted);">HTTPS / APIs / Console</p>
+    <div class="zone">
+      <div class="zone-title">Vietnam — processing &amp; data residency</div>
+      <div class="row">
+        <div class="box">API gateway<br /><span class="small">&amp; integration APIs</span></div>
+        <span class="arrow">→</span>
+        <div class="box">IAM / orgs<br /><span class="small">RBAC, MFA</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box">Object &amp; file<br /><span class="small">storage tier</span></div>
+        <div class="box">Metadata<br /><span class="small">&amp; indexing</span></div>
+        <div class="box sec">Backup &amp;<br /><span class="small">recovery</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box sec">Encryption<br /><span class="small">KMS</span></div>
+        <div class="box sec">Managed IDS<br /><span class="small">SIEM signals</span></div>
+        <div class="box sec">Audit logs<br /><span class="small">&amp; retention</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box">AI gateway<br /><span class="small">LLM, RAG, tools</span></div>
+        <div class="box">Vector / search<br /><span class="small">ERP + docs index</span></div>
+        <div class="box sec">GPU pool<br /><span class="small">train / infer</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box mutedb">Monitoring<br /><span class="small">24/7 NOC</span></div>
+        <div class="box mutedb">Incident<br /><span class="small">response</span></div>
+        <div class="box mutedb">Support<br /><span class="small">VI / EN</span></div>
+      </div>
+      <p class="small" style="margin:0.6em 0 0;text-align:center;">Underlying: in-country data centers or compliant local partner infrastructure (multi-AZ within Vietnam).</p>
+    </div>
+  </div>
+
+  <h2>3. Layered logical architecture</h2>
+  <div class="diagram">
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Components</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Integration</td><td>Web console, SDKs/CLI, REST &amp; event APIs</td><td>Customer access &amp; automation</td></tr>
+        <tr><td>Control plane</td><td>IAM, billing/quotas, policy &amp; compliance configuration</td><td>Governance &amp; commercial metering</td></tr>
+        <tr><td>Data plane</td><td>Distributed object storage, snapshots/versioning, in-VN replication</td><td>Durable, scalable data services</td></tr>
+        <tr><td>Security plane</td><td>Edge protections (WAF/DDoS as applicable), IDS, hardening baselines</td><td>Detective &amp; preventive controls</td></tr>
+        <tr><td>AI, automation &amp; compute</td><td>Managed LLM endpoints (e.g. Azure OpenAI, GPT-4o/4.1), RAG pipelines, OCR/Form Recognizer, analytics sandboxes (Python/AutoML), RPA connectors (UiPath, Power Automate), speech (Whisper, Azure Speech), recommendation services, <strong>tenant GPU instances</strong> (configurable vCPU, RAM, disk, GPU SKU)</td><td>ERP intelligence, document capture, forecasting, workflows, voice ERP, GPU rental for ML</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4. Backup &amp; recovery flow (conceptual)</h2>
+  <div class="diagram">
+    <ol class="small" style="margin:0;padding-left:1.2em;">
+      <li>Customer workload or agent triggers scheduled/immediate backup via API.</li>
+      <li>Keys obtained from KMS; data encrypted in transit (TLS 1.2+) and at rest.</li>
+      <li>Chunks + metadata written to storage tier; immutable / retention policies applied by backup service.</li>
+      <li>IDS and access analytics consume telemetry; anomalies routed to monitoring &amp; IR workflows.</li>
+      <li>Restore path: verified read, policy checks, decrypt, delivery to customer environment (paths remain in Vietnam).</li>
+    </ol>
+  </div>
+
+  <h2>5. Compliance &amp; security mapping</h2>
+  <ul class="small">
+    <li><strong>Data residency:</strong> Customer data stored and processed within Vietnam for regulated workloads.</li>
+    <li><strong>Regulations:</strong> Alignment with Vietnam Cybersecurity Law (2018) and sector guidance; legal review for customer verticals.</li>
+    <li><strong>Standards:</strong> ISO 27001-style ISMS as a certification target; SLAs/DPA templates for uptime, IR, and subprocessors.</li>
+    <li><strong>Cryptography:</strong> Strong encryption at rest (e.g. AES-256) and modern TLS; key separation and rotation.</li>
+    <li><strong>AI &amp; subprocessors:</strong> Where third-party models/APIs are used (OpenAI, Azure, Google Vision, etc.), contracts and data-flow diagrams must reflect customer consent, DPA terms, and whether prompts/embeddings leave Vietnam — offer VN-hosted or sovereign options when required.</li>
+  </ul>
+
+  <h2>6. AI applications for internal ERP systems (reference catalog)</h2>
+  <p class="small">Below maps common ERP AI patterns to technology options. Actual stack is selected per tenant (latency, cost, data sovereignty). RAG and knowledge services connect to approved ERP APIs, warehouses, and document stores inside the residency boundary where possible.</p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Capability</th><th>Primary use cases</th><th>Technology options</th><th>Architecture notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Internal AI chatbot (ERP assistant)</strong></td>
+        <td>Natural-language data queries (“this month’s revenue?”), procedure help, instant report Q&amp;A</td>
+        <td>OpenAI GPT-4o / GPT-4.1; Azure OpenAI Service; <strong>RAG</strong> over ERP DB views, cubes, and curated APIs</td>
+        <td>Orchestration layer enforces RBAC: queries execute as the user’s ERP identity; audit log of questions &amp; tool calls.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>AI OCR &amp; document processing</strong></td>
+        <td>Invoice → bookkeeping lines; automated data entry from scans/PDFs</td>
+        <td>Google Vision API; Azure AI Document Intelligence / Form Recognizer; custom models on tenant GPUs</td>
+        <td>Pipeline: ingest → classify → extract → validation rules → ERP posting API; human-in-the-loop queue for low confidence.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>AI data analytics (AI BI)</strong></td>
+        <td>Revenue &amp; inventory forecasting; anomaly detection (e.g. expense spikes); financial commentary</td>
+        <td>Python + ML (scikit-learn); Power BI + AI features; AutoML (Google Vertex / Azure ML)</td>
+        <td>Feature store or warehouse connection; scheduled jobs on CPU or GPU nodes; exports to dashboards and alerts.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>AI-driven process automation (AI + RPA)</strong></td>
+        <td>Order generation, approval routing, intelligent workflows</td>
+        <td>UiPath (AI Center, Document Understanding); Microsoft Power Automate + AI Builder</td>
+        <td>Event bus from ERP ↔ automation runners; secrets in vault; IDS monitors bot service accounts.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>AI voice (voice-enabled ERP)</strong></td>
+        <td>Hands-free KPI answers (“today’s revenue?”); mobile &amp; field scenarios</td>
+        <td>Whisper (STT); Azure Speech (STT/TTS); LLM backend as in (1)</td>
+        <td>Low-latency path: edge device → STT → intent → secured data API → TTS response; PII minimization in audio retention.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>AI personalization (recommendation)</strong></td>
+        <td>Purchase suggestions, pricing hints, lead/customer recommendations</td>
+        <td>Collaborative filtering + gradient boosting; embeddings from product/customer history; optional deep models on GPU</td>
+        <td>Offline training on GPU rental; online serving API with A/B flags and explainability hooks.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>AI for support</strong></td>
+        <td>Internal L1/L2 bot; ticketing integration; troubleshooting (“why can’t I run AR report?”)</td>
+        <td>Same LLM stack as (1); integration with ITSM/ticket APIs; runbooks as RAG sources</td>
+        <td>Escalation to human with full transcript; link to known-error DB.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><strong>AI knowledge base</strong></td>
+        <td>Centralized ERP manuals, implementation guides, tribal knowledge</td>
+        <td>Document ingestion, chunking, embeddings, vector DB; optional multilingual models</td>
+        <td>Versioning tied to ERP release; access aligned to module licensing.</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td><strong>AI help (contextual process guidance)</strong></td>
+        <td>Step-by-step “create warehouse receipt” with deep links to screens</td>
+        <td>LLM + structured procedure graph; role-aware (accountant vs warehouse); UI context from client shell</td>
+        <td>Differentiator: combines RBAC, current module/screen, and org policies — not static PDFs only.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7. AI / ML platform architecture (conceptual)</h2>
+  <div class="diagram">
+    <div class="zone">
+      <div class="zone-title">Client &amp; ERP tier</div>
+      <div class="row">
+        <div class="box mutedb">Web / mobile ERP</div>
+        <div class="box mutedb">Voice clients</div>
+        <div class="box mutedb">RPA bots</div>
+      </div>
+    </div>
+    <p style="text-align:center;margin:0.35em 0;color:var(--muted);">Mutual TLS / OAuth2 / ERP session propagation</p>
+    <div class="zone">
+      <div class="zone-title">Goodland AI services (control + data)</div>
+      <div class="row">
+        <div class="box">API / agent<br /><span class="small">orchestration</span></div>
+        <div class="box">RAG &amp; tools<br /><span class="small">ERP SQL/API</span></div>
+        <div class="box sec">OCR &amp; docs<br /><span class="small">Vision / DI</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box">Analytics<br /><span class="small">notebooks, AutoML</span></div>
+        <div class="box">Speech<br /><span class="small">STT / TTS</span></div>
+        <div class="box sec">Workflow hub<br /><span class="small">RPA triggers</span></div>
+      </div>
+      <div class="row" style="margin-top:0.5em;">
+        <div class="box mutedb">Vector DB<br /><span class="small">manuals, KB</span></div>
+        <div class="box mutedb">Model registry<br /><span class="small">versions</span></div>
+        <div class="box mutedb">Observability<br /><span class="small">cost, safety</span></div>
+      </div>
+    </div>
+    <p style="text-align:center;margin:0.35em 0;color:var(--muted);">Schedulers, queues, object storage (section 2)</p>
+    <div class="zone">
+      <div class="zone-title">Tenant compute — GPU rental (IaaS)</div>
+      <div class="row">
+        <div class="box">VM / container<br /><span class="small">vCPU, RAM</span></div>
+        <div class="box sec">GPU SKU<br /><span class="small">8–80 GB VRAM</span></div>
+        <div class="box">Disk<br /><span class="small">NVMe / SSD</span></div>
+      </div>
+      <p class="small" style="margin:0.6em 0 0;text-align:center;">Customers choose GPU type, VRAM tier, vCPU, RAM, storage, and <strong>duration</strong> (hourly, monthly reserved). Suitable for training, fine-tuning, batch inference, and self-hosted models.</p>
+    </div>
+  </div>
+  <ul class="small">
+    <li><strong>Isolation:</strong> Dedicated VPC/tenant projects; network policies between ERP data plane and GPU workers.</li>
+    <li><strong>Scaling:</strong> Auto-shutdown policies for dev GPUs; queues for batch inference; spot/preemptible classes optional (lower price, best-effort).</li>
+  </ul>
+
+  <h2>8. GPU rental — SKU reference (illustrative)</h2>
+  <p class="small">SKUs align to NVIDIA-class accelerators commonly requested for ML. Exact chip generation depends on datacenter supply; VRAM columns reflect customer-facing <strong>usable VRAM tiers</strong> (8, 16, 24, 32, 40, 48, 80 GB). <strong>H100</strong> offered as flagship training/inference tier (typically 80 GB).</p>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>Typical GPU families (examples)</th><th>VRAM focus</th><th>Typical workloads</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Entry</strong></td><td>T4-class, L4-class</td><td>8–16 GB</td><td>Light inference, dev/test, small CV/NLP</td></tr>
+      <tr><td><strong>Professional</strong></td><td>RTX / A-series workstation class</td><td>24 GB</td><td>Fine-tuning small LLMs, batch OCR post-processing</td></tr>
+      <tr><td><strong>High-memory</strong></td><td>A30 / L40S-class (examples)</td><td>32–48 GB</td><td>Larger models, multi-GPU optional</td></tr>
+      <tr><td><strong>Datacenter</strong></td><td>A100-class</td><td>40 / 80 GB</td><td>Training, LLM serving at scale</td></tr>
+      <tr><td><strong>Flagship</strong></td><td><strong>NVIDIA H100</strong></td><td>80 GB</td><td>Frontier training, large-scale inference, HPC-style jobs</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Add vCPU and system RAM in standard blocks (e.g. 8–32 vCPU, 32–256 GB RAM) and network-attached or local NVMe volumes per performance tier.</p>
+
+  <h2>9. Indicative pricing — core data platform (VND / month)</h2>
+  <p class="small">VAT may apply. Annual prepay typically 15% below 12× monthly on Starter–Business tiers. Enterprise is custom.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Tier</th>
+        <th>Target segment</th>
+        <th>Included storage</th>
+        <th>Backup</th>
+        <th>IDS / monitoring</th>
+        <th>Support</th>
+        <th>Indicative monthly (VND)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Starter</strong></td>
+        <td>Small SME, pilots</td>
+        <td>500 GB</td>
+        <td>Daily, 14-day retention</td>
+        <td>Basic alerting</td>
+        <td>Business hours, ticket</td>
+        <td>2,500,000 – 4,000,000</td>
+      </tr>
+      <tr>
+        <td><strong>Growth</strong></td>
+        <td>Growing SME, startups</td>
+        <td>2 TB</td>
+        <td>Daily + weekly, 30-day</td>
+        <td>Managed IDS bundle, monthly report</td>
+        <td>Extended + chat</td>
+        <td>8,000,000 – 12,000,000</td>
+      </tr>
+      <tr>
+        <td><strong>Business</strong></td>
+        <td>Mid-market</td>
+        <td>10 TB</td>
+        <td>Policy-based RPO/RTO options</td>
+        <td>Dedicated correlation, SOC integration option</td>
+        <td>24/7, optional CSM</td>
+        <td>28,000,000 – 45,000,000</td>
+      </tr>
+      <tr>
+        <td><strong>Enterprise</strong></td>
+        <td>Regulated / large orgs</td>
+        <td>Custom (50 TB+)</td>
+        <td>In-VN geo-redundancy, legal hold</td>
+        <td>Custom playbooks, IR retainer</td>
+        <td>24/7 + on-site (major cities)</td>
+        <td>Custom (from ~80,000,000 + commit)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Add-ons — core platform (illustrative)</h3>
+  <table>
+    <thead>
+      <tr><th>Add-on</th><th>Notes</th><th>Typical range (VND / month)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Extra storage</td><td>Per TB, volume discounts</td><td>400,000 – 900,000 / TB</td></tr>
+      <tr><td>Extended retention</td><td>e.g. 90d → 365d</td><td>+15–35% on backup component</td></tr>
+      <tr><td>API &amp; integration pack</td><td>Higher limits, dedicated endpoints</td><td>1,500,000 – 5,000,000</td></tr>
+      <tr><td>Premium SLA</td><td>e.g. 99.9% target</td><td>+20–40% platform fee</td></tr>
+    </tbody>
+  </table>
+
+  <h2>10. Indicative pricing — ERP AI services (VND)</h2>
+  <p class="small">Bundles assume Goodland-hosted orchestration + metering. <strong>Third-party model usage</strong> (OpenAI, Azure OpenAI, Google Cloud) is often passed through at cost + margin or requires customer bring-your-own-key (BYOK). Numbers are order-of-magnitude for planning.</p>
+  <table>
+    <thead>
+      <tr><th>Package</th><th>What’s included</th><th>Indicative monthly (VND)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>AI ERP Lite</strong></td><td>Internal assistant + knowledge base (1), (8); up to ~5k RAG queries/mo; 1 connector</td><td>6,000,000 – 12,000,000</td><td>Add seats or queries ala carte</td></tr>
+      <tr><td><strong>AI ERP Standard</strong></td><td>Lite + OCR pipeline (2) up to 2k pages/mo + support bot (7)</td><td>15,000,000 – 28,000,000</td><td>Extra pages 800 – 2,500 VND/page by volume</td></tr>
+      <tr><td><strong>AI ERP Plus</strong></td><td>Standard + voice channel (5) + workflow hooks for RPA (4) — 2 flows</td><td>28,000,000 – 48,000,000</td><td>STT/TTS minutes billed separately (below)</td></tr>
+      <tr><td><strong>AI Analytics add-on</strong></td><td>Forecasting &amp; anomaly jobs (3); 1 dashboard workspace; scheduled scoring</td><td>8,000,000 – 22,000,000</td><td>Excludes Power BI / cloud AutoML licenses if customer-owned</td></tr>
+      <tr><td><strong>Recommendations add-on</strong></td><td>Reco API (6); retrain monthly; A/B hooks</td><td>5,000,000 – 15,000,000</td><td>Heavy training uses GPU hours (section 11)</td></tr>
+      <tr><td><strong>Contextual AI Help</strong></td><td>Role-aware guidance (9); procedure graph build + 40h professional services once</td><td>4,000,000 – 10,000,000 / mo + one-time 40,000,000 – 120,000,000</td><td>PS for screen-map &amp; content curation</td></tr>
+    </tbody>
+  </table>
+  <h3>AI usage meters (illustrative)</h3>
+  <table>
+    <thead>
+      <tr><th>Meter</th><th>Unit</th><th>Typical range (VND)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>LLM / RAG query (after bundle)</td><td>per 1,000 calls</td><td>600,000 – 2,500,000</td></tr>
+      <tr><td>STT (Whisper / Azure Speech)</td><td>per audio hour</td><td>180,000 – 550,000</td></tr>
+      <tr><td>TTS</td><td>per 1M characters</td><td>400,000 – 1,200,000</td></tr>
+      <tr><td>OCR / document AI</td><td>per page</td><td>800 – 2,500</td></tr>
+      <tr><td>RPA production bot</td><td>per bot / month</td><td>3,000,000 – 9,000,000</td></tr>
+    </tbody>
+  </table>
+
+  <h2>11. Indicative pricing — GPU rental (VND / hour)</h2>
+  <p class="small">Linux VM with selected GPU. <strong>vCPU</strong> and <strong>RAM</strong> priced additively (examples: 2,000 – 8,000 VND / vCPU-hour; 1,500 – 5,000 VND / GB-RAM-hour). <strong>Disk:</strong> ~400 – 1,200 VND / GB-month (NVMe premium). <strong>Committed use:</strong> 1-month commit ~8–12% off; 12-month ~20–35% off headline hourly. <strong>Spot / interruptible</strong> (if offered): ~40–70% below on-demand. VAT may apply.</p>
+  <table>
+    <thead>
+      <tr><th>GPU tier</th><th>VRAM (customer-facing)</th><th>Indicative VND / GPU-hour</th><th>Comment</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Entry (e.g. T4 / L4 class)</td><td>8 GB</td><td>12,000 – 28,000</td><td>Dev / light inference</td></tr>
+      <tr><td>Entry+</td><td>16 GB</td><td>18,000 – 38,000</td><td>Small fine-tunes</td></tr>
+      <tr><td>Workstation-class</td><td>24 GB</td><td>35,000 – 75,000</td><td>Mid-size models</td></tr>
+      <tr><td>High-memory</td><td>32 GB</td><td>55,000 – 110,000</td><td>Training / batch</td></tr>
+      <tr><td>High-memory</td><td>40–48 GB</td><td>85,000 – 190,000</td><td>Larger batches, multi-worker</td></tr>
+      <tr><td>Datacenter (A100-class)</td><td>40 GB</td><td>150,000 – 320,000</td><td>Production training</td></tr>
+      <tr><td>Datacenter (A100-class)</td><td>80 GB</td><td>220,000 – 450,000</td><td>Large-model training</td></tr>
+      <tr><td><strong>Flagship (H100-class)</strong></td><td><strong>80 GB</strong></td><td><strong>480,000 – 980,000</strong></td><td>Frontier training &amp; heavy inference</td></tr>
+    </tbody>
+  </table>
+  <p class="small"><strong>Packaging:</strong> Publish <strong>bundled SKUs</strong> (GPU + fixed vCPU/RAM/disk) for common sizes to simplify quoting; use component meters above for custom builds.</p>
+
+  <p class="footnote">
+    Goodland Cloud — Architecture &amp; Pricing appendix (core platform, ERP AI catalog, GPU rental). Generated for planning; not a contractual offer. GPU and model prices fluctuate with supply and FX. © Goodland Cloud (concept document).<br />
+    <strong>Related:</strong> implementation methodology &amp; support structure — <em>Goodland-Cloud-Technical-Overview-Support</em> (HTML/PDF).
+  </p>
+</body>
+</html>
