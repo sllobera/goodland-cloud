@@ -2,6 +2,7 @@
   "name": "goodland-cloud",
   "private": true,
   "scripts": {
+    "build": "node scripts/vercel-build.mjs",
     "build:pdf": "node scripts/generate-pdf.mjs",
     "build:pdf:overview": "node scripts/generate-pdf.mjs --only=Goodland-Cloud-Technical-Overview-Support.html"
   },

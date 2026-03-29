@@ -1,10 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "echo 'skip install'",
-  "buildCommand": "echo 'skip build'",
-  "rewrites": [
-    { "source": "/docs/:path*", "destination": "/docs/:path*" },
-    { "source": "/", "destination": "/website/index.html" },
-    { "source": "/:path*", "destination": "/website/:path*" }
-  ]
+  "installCommand": "npm install --omit=dev",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public"
 }
