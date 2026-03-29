@@ -29,4 +29,11 @@ copyRecursive(website, pub);
 fs.mkdirSync(path.join(pub, "docs"), { recursive: true });
 copyRecursive(docs, path.join(pub, "docs"));
 
+const indexPath = path.join(pub, "index.html");
+if (fs.existsSync(indexPath)) {
+  let html = fs.readFileSync(indexPath, "utf8");
+  html = html.replaceAll('href="../docs/', 'href="/docs/');
+  fs.writeFileSync(indexPath, html);
+}
+
 console.log("Built public/: website + docs");
