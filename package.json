@@ -4,7 +4,8 @@
   "scripts": {
     "build": "node scripts/vercel-build.mjs",
     "build:pdf": "node scripts/generate-pdf.mjs",
-    "build:pdf:overview": "node scripts/generate-pdf.mjs --only=Goodland-Cloud-Technical-Overview-Support.html"
+    "build:pdf:overview": "node scripts/generate-pdf.mjs --only=Goodland-Cloud-Technical-Overview-Support.html",
+    "build:pdf:economics": "node scripts/generate-pdf.mjs --only=Goodland-Cloud-Unit-Economics-Benchmarking.html"
   },
   "devDependencies": {
     "puppeteer": "^24.4.0"

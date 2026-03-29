@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Goodland Cloud — Unit Economics, COGS &amp; Competitor Benchmarks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink: #0f1419; --muted: #4a5568; --line: #cbd5e0; --panel: #f4f1ea; --accent: #1b5e3a; --accent2: #c45c26; --warn: #b45309; }
+    * { box-sizing: border-box; }
+    body { font-family: "Literata", Georgia, serif; font-size: 10.5pt; line-height: 1.45; color: var(--ink); margin: 0; }
+    h1, h2, h3 { font-family: "Unbounded", system-ui, sans-serif; font-weight: 700; }
+    h1 { font-size: 20pt; margin: 0 0 0.35em; letter-spacing: -0.02em; }
+    h2 { font-size: 12pt; margin: 1.35em 0 0.45em; color: var(--accent); border-bottom: 2px solid var(--line); padding-bottom: 0.2em; }
+    h3 { font-size: 10.5pt; margin: 1em 0 0.35em; }
+    p, li { color: var(--muted); }
+    .meta { font-size: 9pt; color: var(--muted); margin-bottom: 1.5em; }
+    .cover { min-height: 220mm; display: flex; flex-direction: column; justify-content: center; page-break-after: always; }
+    .tag { display: inline-block; background: var(--panel); border: 1px solid var(--line); padding: 0.2em 0.55em; font-size: 8.5pt; font-family: "Unbounded", sans-serif; }
+    .callout { background: #fffbeb; border: 1px solid #fcd34d; padding: 0.65em 0.75em; margin: 0.75em 0; font-size: 8.5pt; page-break-inside: avoid; }
+    .callout strong { color: var(--warn); }
+    table { width: 100%; border-collapse: collapse; font-size: 8.5pt; margin: 0.65em 0 1.1em; }
+    th, td { border: 1px solid var(--line); padding: 0.4em 0.45em; text-align: left; vertical-align: top; }
+    th { background: var(--panel); font-family: "Unbounded", sans-serif; font-weight: 600; font-size: 8pt; color: var(--ink); }
+    .small { font-size: 8.5pt; }
+    ul { margin: 0.35em 0 0.75em 1.1em; padding: 0; }
+    .footnote { font-size: 8pt; color: var(--muted); margin-top: 2em; border-top: 1px solid var(--line); padding-top: 0.75em; }
+    @media print { h2 { page-break-after: avoid; } }
+  </style>
+</head>
+<body>
+
+  <section class="cover">
+    <span class="tag">Finance &amp; strategy — internal</span>
+    <h1>Goodland Cloud</h1>
+    <p class="meta"><strong>Unit economics, wholesale/COGS, support allocation &amp; competitor retail benchmarks</strong><br />
+    Vietnam · Planning workbook — replace assumptions with live quotes</p>
+    <p class="small">Companion to <em>Goodland-Cloud-Architecture-Pricing</em>. Use this file to reconcile <strong>what customers pay</strong> with <strong>what Goodland pays</strong> (hyperscaler, DC partner, APIs) plus <strong>Vietnam operating costs</strong>, then stress-test against <strong>competitor list prices</strong>.</p>
+  </section>
+
+  <div class="callout">
+    <strong>Clarification — the other pricing document is not “wholesale.”</strong>
+    The figures in <em>Architecture &amp; Pricing</em> are indicative <strong>B2B retail / list prices charged to end customers</strong> (or MSSP-style bundles), not the price Goodland pays AWS/Azure, and not channel distributor wholesale unless you explicitly create a partner price list. This document separates <strong>COGS / wholesale</strong> from <strong>customer retail</strong>.
+  </div>
+
+  <h2>1. Method &amp; FX</h2>
+  <ul class="small">
+    <li><strong>COGS / wholesale:</strong> Your actual invoice from cloud provider, colo, or software vendor (often USD or VND). Below uses <strong>illustrative</strong> USD list-style unit costs converted at an example rate <strong>1 USD ≈ 25,000 VND</strong> — update to your contract and spot FX.</li>
+    <li><strong>Allocated support:</strong> Portion of L1/L2/L3 + NOC payroll, tools, and shift coverage attributed to each product unit (TB, VM-hour, 1k API calls). Replace with your time-motion or cost model.</li>
+    <li><strong>Competitor retail:</strong> Public list / calculator outputs or published tariffs (hyperscalers + Vietnamese cloud brands). <strong>Verify before board use</strong> — promos, commits, and enterprise EAs change effective price.</li>
+    <li><strong>Margin headroom:</strong> Indicative <em>gross</em> gap (retail − COGS − allocated direct support). Overhead (sales, marketing, office, migration PS) is layered in §5 — not subtracted in per-line “headroom” column unless noted.</li>
+  </ul>
+
+  <h2>2. Vietnam operating cost buckets (planning lines)</h2>
+  <p class="small">Load these into your P&amp;L or per-customer model. Numbers are <strong>structure only</strong> — fill FTE counts and VND salaries from HR/finance.</p>
+  <table>
+    <thead>
+      <tr><th>Bucket</th><th>Typical contents</th><th>How to model</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Infrastructure COGS</strong></td><td>AWS/Azure/local IaaS, backup licenses, SIEM/IDS vendor seats, egress, KMS</td><td>Actual monthly bill × allocation % per product line</td></tr>
+      <tr><td><strong>Third-party AI / APIs</strong></td><td>OpenAI, Azure OpenAI, Google Vision, Azure Document Intelligence</td><td>Metered usage + commit discounts; often pass-through + margin</td></tr>
+      <tr><td><strong>24/7 support</strong></td><td>NOC rotations, L1 scripts, L2 platform, on-call premiums, ticketing</td><td>FTE cost ÷ productive hours ÷ tickets or ÷ TB under management</td></tr>
+      <tr><td><strong>Ongoing service / CSM</strong></td><td>QBRs, capacity reviews, minor config changes (Business+)</td><td>Partial FTE per named account</td></tr>
+      <tr><td><strong>Setup / migration</strong></td><td>Discovery, landing zone, data transfer, cutover, hypercare</td><td>Fixed PS SOW or hours × blended rate (VND/hour HCMC)</td></tr>
+      <tr><td><strong>Sales &amp; marketing</strong></td><td>BD, events, digital, partner rebates</td><td>% of revenue or CAC per new logo</td></tr>
+      <tr><td><strong>Office &amp; overhead</strong></td><td>Rent (Melbourne + HCM), legal, insurance, finance, tooling</td><td>Monthly allocation % to Goodland Cloud P&amp;L</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Product lines — wholesale/COGS vs competitor retail vs our indicative retail</h2>
+  <p class="small">Each row: <strong>Unit</strong> → <strong>Goodland COGS / wholesale (illustrative)</strong> → <strong>+ allocated 24/7 &amp; ops</strong> (rough) → <strong>Competitor retail benchmark</strong> → <strong>Our indicative customer price</strong> (from Architecture-Pricing) → <strong>Comment on margin headroom</strong>.</p>
+
+  <h3>3.1 Object &amp; backup storage (per TB / month)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Line</th>
+        <th>Unit</th>
+        <th>Wholesale / COGS (illustrative)</th>
+        <th>+ Allocated support / TB-mo (illustrative)</th>
+        <th>Competitor retail (benchmark)</th>
+        <th>Our indicative retail (add-on tier)</th>
+        <th>Headroom note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Raw object storage (S3-class, warm)</td>
+        <td>1 TB-mo</td>
+        <td>~USD 20–28 / TB-mo (region + redundancy) → <strong>~500k–700k VND</strong> at 25k FX</td>
+        <td><strong>+80k–250k VND</strong> (share of L2/monitoring per TB at low scale)</td>
+        <td><strong>AWS S3 Standard</strong> public list (e.g. ap-southeast-1 tiered); <strong>Azure Blob</strong> hot; <strong>VN local cloud</strong> list often <strong>~400k–1.2M VND/TB-mo</strong> equivalent — <em>verify quotes</em></td>
+        <td><strong>400k–900k VND</strong> / TB add-on (your doc)</td>
+        <td>Thin if single-AZ COGS high; margin from bundling, commits, and cross-sell IDS/backup</td>
+      </tr>
+      <tr>
+        <td>Backup / snapshot overhead</td>
+        <td>1 TB-mo stored</td>
+        <td>~USD 10–22 / TB-mo (cold/glacier-class mix) → <strong>~250k–550k VND</strong></td>
+        <td><strong>+50k–180k VND</strong> (restore testing labor amortized)</td>
+        <td><strong>AWS Backup + S3 IA/Glacier</strong>; <strong>Azure Backup</strong>; MSP bundles often <strong>priced 1.2–2.5× raw storage list</strong></td>
+        <td>Embedded in tier packages (Starter–Enterprise)</td>
+        <td>Margin when RPO/RTO SLAs justify premium over raw object list</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3.2 Security monitoring (IDS / SIEM-light)</h3>
+  <table>
+    <thead>
+      <tr><th>Line</th><th>Unit</th><th>Wholesale / COGS</th><th>+ Support allocation</th><th>Competitor retail</th><th>Our indicative retail</th><th>Headroom</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Managed detection (log ingest + rules)</td>
+        <td>per tenant / month</td>
+        <td>Vendor seat + ingest (e.g. <strong>USD 200–1,500+</strong>/mo at SMB scale) → <strong>~5M–38M VND</strong></td>
+        <td><strong>+3M–15M VND</strong> analyst time (monthly report, tuning)</td>
+        <td><strong>Splunk Cloud</strong>, <strong>Datadog</strong>, <strong>Microsoft Sentinel</strong> list + SIEM MSSP retainer in VN often <strong>15M–80M VND/mo</strong> SMB band — <em>verify</em></td>
+        <td>Bundled in Growth–Enterprise tiers (not sold purely as GB)</td>
+        <td>Bundle hides commodity ingest COGS; upsell on IR playbooks</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 AI — LLM / RAG (ERP assistant)</h3>
+  <table>
+    <thead>
+      <tr><th>Line</th><th>Unit</th><th>Wholesale / COGS</th><th>+ Support allocation</th><th>Competitor retail</th><th>Our indicative retail</th><th>Headroom</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>LLM tokens (GPT-4o class via API)</td>
+        <td>per 1M input+output tokens (blended)</td>
+        <td><strong>OpenAI / Azure OpenAI</strong> public list (check current $/1M); example order <strong>USD 3–15+</strong>/1M blended → <strong>~75k–375k+ VND</strong></td>
+        <td><strong>+15–35%</strong> orchestration, logging, RAG infra (vector DB, small VMs)</td>
+        <td>Same API list + ISV margin; <strong>Copilot / embedded ERP AI</strong> often per-seat <strong>USD 20–50+/user/mo</strong> — compare to your bundle</td>
+        <td>Bundle <strong>6M–48M VND/mo</strong> + meter <strong>600k–2.5M per 1k queries</strong> (your doc)</td>
+        <td>High volatility; use BYOK or commit pricing; margin from caps &amp; caching</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3.4 AI — OCR / document intelligence</h3>
+  <table>
+    <thead>
+      <tr><th>Line</th><th>Unit</th><th>Wholesale / COGS</th><th>+ Support allocation</th><th>Competitor retail</th><th>Our indicative retail</th><th>Headroom</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Document AI page</td>
+        <td>per page</td>
+        <td><strong>Azure Document Intelligence</strong> / <strong>Google Document AI</strong> list (cents/page tiered) → often <strong>~300–1,200 VND/page</strong> equivalent</td>
+        <td><strong>+200–800 VND</strong> workflow, QA queue, ERP posting</td>
+        <td>Hyperscaler list + BPO/OCR shops <strong>1k–4k VND/page</strong> all-in quotes (variable)</td>
+        <td><strong>800–2,500 VND</strong>/page overage (your doc)</td>
+        <td>Volume tiers and layout-simple docs improve margin</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3.5 GPU rental (per GPU-hour, Linux VM)</h3>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>Unit</th><th>Wholesale / COGS (illustrative)</th><th>+ Support allocation</th><th>Competitor retail (benchmark)</th><th>Our indicative retail</th><th>Headroom</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Entry (T4/L4-class)</td>
+        <td>1 GPU-hour</td>
+        <td><strong>USD 0.35–1.10</strong> on-demand equiv. → <strong>~9k–28k VND</strong></td>
+        <td><strong>+3k–12k VND</strong> (hypervisor, patching, billing)</td>
+        <td><strong>AWS G4dn</strong>, <strong>Lambda Labs</strong>, <strong>RunPod</strong> public — check live; often <strong>15k–45k VND/h</strong> entry</td>
+        <td><strong>12k–38k VND/h</strong> (your band)</td>
+        <td>Tight on spot-heavy markets; protect with commits or idle penalties</td>
+      </tr>
+      <tr>
+        <td>Flagship (H100 80GB-class)</td>
+        <td>1 GPU-hour</td>
+        <td><strong>USD 4–9+</strong> on-demand (supply-driven) → <strong>~100k–225k+ VND</strong></td>
+        <td><strong>+25k–80k VND</strong></td>
+        <td><strong>AWS p5</strong>, <strong>Azure ND H100 v5</strong> list calculators; often <strong>350k–900k+ VND/h</strong> effective retail</td>
+        <td><strong>480k–980k VND/h</strong> (your doc)</td>
+        <td>Wide or thin depending on allocation &amp; power; enterprise commits change COGS</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3.6 Core tier packages (Starter → Enterprise) — summary view</h3>
+  <p class="small">Tiers bundle storage + backup + IDS + support hours. Competitor analogues: <strong>AWS / Azure + MSP wrapper</strong>, or <strong>local VN cloud “managed cloud”</strong> quotes. Decompose each sale using §3.1–3.2 COGS + FTE share.</p>
+  <table>
+    <thead>
+      <tr><th>Our tier</th><th>Indicative customer retail (your doc)</th><th>Order-of-magnitude COGS build-up (planning)</th><th>Competitor retail analogue</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Starter</td><td>2.5–4M VND/mo</td><td>Storage COGS + minimal IDS + BH support allocation</td><td>Small MSP backup + cloud: often <strong>2–6M VND/mo</strong> for ~500GB-class — <em>verify</em></td></tr>
+      <tr><td>Growth</td><td>8–12M VND/mo</td><td>Higher TB + managed IDS bundle + extended coverage</td><td>Mid MSSP + object storage: <strong>8–20M VND/mo</strong> band</td></tr>
+      <tr><td>Business</td><td>28–45M VND/mo</td><td>Multi-TB + 24/7 Sev1 + SOC hooks</td><td>Enterprise managed cloud + SIEM entry: <strong>25–80M+ VND/mo</strong></td></tr>
+      <tr><td>Enterprise</td><td>Custom</td><td>Committed infra + IR + CSM FTE slice</td><td>Hyperscaler EDP + Big4 MSSP: <strong>highly variable</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Simple margin bridge (per customer or portfolio)</h2>
+  <p class="small">Use after you replace illustrative COGS with invoices.</p>
+  <table>
+    <thead>
+      <tr><th>Step</th><th>Line</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>A</td><td><strong>Revenue</strong> (contracted MRR + usage)</td><td>From quotes / billing system</td></tr>
+      <tr><td>B</td><td><strong>− Infrastructure &amp; API COGS</strong></td><td>AWS/Azure/local DC + AI meters</td></tr>
+      <tr><td>C</td><td><strong>− Direct support &amp; ops (variable)</strong></td><td>NOC/L2 hours attributable to tenant</td></tr>
+      <tr><td>D</td><td><strong>= Gross margin</strong></td><td>Target band often 40–65% for managed services (varies)</td></tr>
+      <tr><td>E</td><td><strong>− S&amp;M, migration PS (amortized), office</strong></td><td>Vietnam + AU allocation</td></tr>
+      <tr><td>F</td><td><strong>= Contribution / EBITDA proxy</strong></td><td>Board view</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Where to pull “real” wholesale &amp; competitor retail</h2>
+  <ul class="small">
+    <li><strong>Your wholesale:</strong> AWS Cost Explorer, Azure Cost Management, partner DC invoices, OpenAI/Azure OpenAI usage CSVs.</li>
+    <li><strong>Hyperscaler list (competitor retail):</strong> AWS pricing calculator, Azure pricing calculator, Google Cloud SKU pages — export to spreadsheet.</li>
+    <li><strong>Vietnam local clouds:</strong> Request PDF price lists from <strong>FPT Cloud, Viettel Cloud, VNPT, CMC, VNG Cloud</strong> (object storage, VM, GPU if listed).</li>
+    <li><strong>MSP competitors:</strong> RFP-style quotes for “managed backup + SOC-lite” to benchmark your tier pricing.</li>
+  </ul>
+
+  <p class="footnote">
+    <strong>Related:</strong> <em>Goodland-Cloud-Architecture-Pricing.html</em> — customer-facing indicative list prices.<br />
+    All USD/VND and competitor figures here are <strong>illustrative planning assumptions</strong>, not financial advice or guaranteed margins. Replace with contracted rates before pricing decisions.<br />
+    © Goodland Cloud — internal planning template.
+  </p>
+</body>
+</html>

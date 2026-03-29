@@ -30,6 +30,21 @@ const allJobs = [
     pdf: path.join(root, "docs", "Goodland-Cloud-Technical-Overview-Support.pdf"),
     margin: { top: "18mm", right: "14mm", bottom: "18mm", left: "14mm" },
   },
+  {
+    html: path.join(root, "docs", "Goodland-Cloud-Unit-Economics-Benchmarking.html"),
+    pdf: path.join(root, "docs", "Goodland-Cloud-Unit-Economics-Benchmarking.pdf"),
+    margin: { top: "16mm", right: "12mm", bottom: "16mm", left: "12mm" },
+  },
+  {
+    html: path.join(root, "docs", "Goodland-Cloud-Quotation-Dai-Hoc-Dau-Khi-2026.html"),
+    pdf: path.join(root, "docs", "Goodland-Cloud-Quotation-Dai-Hoc-Dau-Khi-2026.pdf"),
+    margin: { top: "14mm", right: "12mm", bottom: "14mm", left: "12mm" },
+  },
+  {
+    html: path.join(root, "docs", "Goodland-Cloud-Quotation-Nhat-Go-2025.html"),
+    pdf: path.join(root, "docs", "Goodland-Cloud-Quotation-Nhat-Go-2025.pdf"),
+    margin: { top: "14mm", right: "12mm", bottom: "14mm", left: "12mm" },
+  },
 ];
 
 const jobs = onlySuffix

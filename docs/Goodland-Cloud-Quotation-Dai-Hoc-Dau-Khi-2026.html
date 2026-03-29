@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Goodland Cloud — Báo giá đối chiếu · Đại học Dầu Khí</title>
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Unbounded:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: Literata, Georgia, serif; font-size: 11pt; line-height: 1.45; color: #1a1a1a; max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+    h1 { font-family: Unbounded, sans-serif; font-size: 1.35rem; margin: 0 0 0.5rem; }
+    h2 { font-family: Unbounded, sans-serif; font-size: 1rem; margin: 1.5rem 0 0.5rem; color: #1b5e3a; border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; }
+    .meta { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.75rem 0; }
+    th, td { border: 1px solid #ccc; padding: 0.45rem 0.5rem; text-align: left; vertical-align: top; }
+    th { background: #f4f1ea; font-family: Unbounded, sans-serif; font-size: 0.78rem; }
+    .num { text-align: right; white-space: nowrap; }
+    .note { font-size: 0.85rem; color: #444; background: #faf9f6; border: 1px solid #e5e2dc; padding: 0.75rem; margin: 1rem 0; }
+    .total { font-weight: 700; background: #e8f5ef; }
+    ul { margin: 0.35rem 0 0.75rem 1.2rem; padding: 0; font-size: 0.9rem; color: #444; }
+    .foot { font-size: 0.8rem; color: #666; margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <h1>BẢNG CHÀO GIÁ — Goodland Cloud</h1>
+  <p class="meta">
+    <strong>Khách hàng tham chiếu:</strong> Đại học Dầu Khí<br />
+    <strong>Đối chiếu báo giá:</strong> IDS — Công ty TNHH Giải pháp Dữ liệu Sáng tạo, số <strong>2402/DHDK-IDS/2026</strong> (24/02/2026)<br />
+    <strong>Ngày báo giá Goodland Cloud:</strong> 29/03/2026 · <em>Giá mang tính chào mời; điều chỉnh sau khảo sát kỹ thuật &amp; cam kết SLA.</em>
+  </p>
+
+  <h2>1. Tóm tắt phạm vi theo hồ sơ IDS</h2>
+  <ul>
+    <li><strong>Máy chủ cloud 01</strong> (tối thiểu Bravo): 12 vCPU, 64 GB RAM, 300 GB SSD, Windows Server 2022 Standard, SQL Server Enterprise, AV, FW, SSL, 300 Mbps nội địa / 10 Mbps QT, IP public + private.</li>
+    <li><strong>Máy chủ cloud 02</strong> (khuyến nghị Bravo): 12 vCPU, 128 GB RAM, 500 GB SSD, cấu hình tương tự.</li>
+    <li><strong>Lưu trữ backup</strong> 2 TB (dòng giá trên file IDS để trống “-”).</li>
+    <li><strong>Dịch vụ quản trị</strong> (khởi tạo, FW, vá lỗi, sao lưu, giám sát 24/7) — IDS ghi <strong>miễn phí</strong> trong thời gian sử dụng.</li>
+  </ul>
+
+  <h2>2. So sánh nhanh tổng chi phí hàng tháng (đã gồm VAT 10%)</h2>
+  <table>
+    <thead>
+      <tr><th>Nguồn</th><th>Máy 01</th><th>Máy 02</th><th>2 TB backup*</th><th>Tổng VAT</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>IDS (theo PDF)</strong></td>
+        <td class="num">3.080.000</td>
+        <td class="num">5.445.000</td>
+        <td class="num">—</td>
+        <td class="num"><strong>8.525.000</strong></td>
+      </tr>
+      <tr class="total">
+        <td><strong>Goodland Cloud (đề xuất A — cạnh tranh)</strong></td>
+        <td class="num">2.970.000</td>
+        <td class="num">5.225.000</td>
+        <td class="num">880.000</td>
+        <td class="num"><strong>9.075.000</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Goodland Cloud (đề xuất B — đầy đủ dịch vụ quản trị)</strong></td>
+        <td class="num">3.300.000</td>
+        <td class="num">5.720.000</td>
+        <td class="num">990.000</td>
+        <td class="num"><strong>10.010.000</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="meta" style="margin-top:0.25rem">*2 TB backup: Goodland tính theo bảng giá tham khảo (≈400k–500k/TB-mo chưa VAT × 2 TB). IDS không ghi số tiền trên PDF — tổng IDS thực tế có thể cao hơn nếu backup tính riêng.</p>
+
+  <h2>3. Chi tiết đề xuất A — Goodland Cloud (VND/tháng, chưa VAT)</h2>
+  <table>
+    <thead>
+      <tr><th>STT</th><th>Hạng mục</th><th>Mô tả</th><th class="num">Đơn giá</th><th class="num">VAT 10%</th><th class="num">Thành tiền</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Gói máy chủ đám mây 01</td>
+        <td>12 vCPU, 64 GB RAM, 300 GB SSD, Win Server 2022 Std, IP public/private, băng thông 300/10 Mbps, tường lửa, SSL, AV doanh nghiệp, DC Việt Nam. <strong>SQL Server Enterprise:</strong> theo BYOL của trường hoặc báo giá SPLA bổ sung (mục 5).</td>
+        <td class="num">2.700.000</td>
+        <td class="num">270.000</td>
+        <td class="num">2.970.000</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Gói máy chủ đám mây 02</td>
+        <td>12 vCPU, 128 GB RAM, 500 GB SSD, cùng tiêu chí mạng &amp; bảo mật như máy 01. SQL: như trên.</td>
+        <td class="num">4.750.000</td>
+        <td class="num">475.000</td>
+        <td class="num">5.225.000</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Cloud backup 2 TB</td>
+        <td>Lưu trữ sao lưu mã hóa, data residency VN, lịch &amp; giữ bản theo chính sách thỏa thuận.</td>
+        <td class="num">800.000</td>
+        <td class="num">80.000</td>
+        <td class="num">880.000</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Quản trị &amp; giám sát (gói A)</td>
+        <td>Khởi tạo, cấu hình FW, vá bảo mật định kỳ, job backup, giám sát NOC <strong>giờ hành chính + hotline sự cố</strong> (không tương đương full 24/7 premium).</td>
+        <td class="num">0</td>
+        <td class="num">0</td>
+        <td class="num">0</td>
+      </tr>
+      <tr class="total">
+        <td colspan="3"><strong>Tổng đề xuất A (đã VAT)</strong></td>
+        <td class="num" colspan="3" style="text-align:right"><strong>9.075.000</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Đề xuất B — nâng cấp hỗ trợ 24/7 &amp; SLA (chưa VAT)</h2>
+  <p class="meta">Cùng hạ tầng như A; bổ sung đối sánh gần với “giám sát &amp; hỗ trợ 24/7” trong mô tả IDS.</p>
+  <table>
+    <thead>
+      <tr><th>STT</th><th>Hạng mục</th><th class="num">Chưa VAT</th><th class="num">VAT</th><th class="num">Gồm VAT</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Máy chủ 01 (managed 24/7)</td><td class="num">3.000.000</td><td class="num">300.000</td><td class="num">3.300.000</td></tr>
+      <tr><td>2</td><td>Máy chủ 02 (managed 24/7)</td><td class="num">5.200.000</td><td class="num">520.000</td><td class="num">5.720.000</td></tr>
+      <tr><td>3</td><td>Backup 2 TB (premium retention)</td><td class="num">900.000</td><td class="num">90.000</td><td class="num">990.000</td></tr>
+      <tr class="total"><td colspan="2"><strong>Tổng đề xuất B (đã VAT)</strong></td><td colspan="3" class="num"><strong>10.010.000</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>5. Bản quyền Microsoft SQL Server Enterprise</strong><br />
+    Báo giá IDS có đính kèm SQL Enterprise trên cả hai máy. Goodland Cloud mặc định chào <strong>hạ tầng + Windows Server</strong>; SQL Enterprise có thể: (i) <strong>BYOL</strong> của Đại học Dầu Khí (giấy phép Volume/Education nếu đủ điều kiện), hoặc (ii) <strong>SPLA / CSP</strong> theo usage — cần bảng kê core/socket để báo giá riêng (thường là dòng tiền đáng kể so với chỉ Windows + VM). Vui lòng xác nhận mô hình license để chốt giá cuối.
+  </div>
+
+  <h2>6. Điều khoản gợi ý</h2>
+  <ul>
+    <li>Thanh toán: tương tự IDS (30% / 70%) hoặc theo thỏa thuận.</li>
+    <li>Thời gian triển khai: 1–2 tuần sau PO và đợt thanh toán đầu.</li>
+    <li>Hiệu lực báo giá: 30 ngày.</li>
+    <li>SLA uptime &amp; hỗ trợ: theo phụ lục Business / Enterprise trong tài liệu Goodland Cloud (gửi kèm khi chốt hợp đồng).</li>
+  </ul>
+
+  <p class="foot">
+    Goodland Cloud — báo giá nội bộ / gửi khách hàng sau khi pháp chế &amp; kỹ thuật xác nhận.<br />
+    Liên hệ: <a href="mailto:info@goodlandbpo.com">info@goodlandbpo.com</a> · Úc +61 1300 661 888 · Việt Nam +84 2838 441 040
+  </p>
+</body>
+</html>
